@@ -85,7 +85,6 @@ authAppRouter.post(
             return res.status(200).json({
               message: "Login successfully",
               data: user.fullname,
-
               token: token,
             });
           }

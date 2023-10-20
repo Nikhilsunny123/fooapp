@@ -1,12 +1,14 @@
 import express from "express";
 import { check, validationResult } from "express-validator";
-import FoodApp from "../models/foodModel";
-import userAuthenticator from "../common/userAuthenticator";
-import adminAuthenticator from "../common/adminAuthenticator";
 
-const foodAppRouter = express.Router();
+import adminAuthenticator from "../../common/adminAuthenticator";
+import FoodApp from "../../models/foodModel";
 
-foodAppRouter.post(
+
+
+const foodAppAdminRouter = express.Router();
+
+foodAppAdminRouter.post(
   "/add",
   adminAuthenticator,
   [
@@ -43,7 +45,6 @@ foodAppRouter.post(
         message: "Food item added successfully",
         data: newFoodItemResp,
       });
-      // return res.status(200).json({ message: 'Appointment added successfully', data: newAppointmentResp });
     } catch (error) {
       let message = "Server Error";
       if (error.message) {
@@ -54,4 +55,5 @@ foodAppRouter.post(
   }
 );
 
-export default foodAppRouter;
+
+export default foodAppAdminRouter;

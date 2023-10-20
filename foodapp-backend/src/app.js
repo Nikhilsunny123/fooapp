@@ -3,8 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./db";
 import bodyParser from "body-parser";
-import foodAppRouter from "./routes/foodAppRouter";
+
 import authAppRouter from "./routes/authRouter";
+import foodAppAdminRouter from "./routes/admin/foodAppAdminRouter";
+import foodAppRouter from "./routes/user/foodAppRouter";
 
 dotenv.config();
 const app = express();
@@ -17,6 +19,10 @@ app.get("/", (req, res) => {
 });
 app.use(bodyParser.json());
 app.use("/user", authAppRouter);
+
+//admin
+app.use("/admin/foodapp", foodAppAdminRouter);
+
 app.use("/foodapp", foodAppRouter);
 
 const PORT = 3000;
