@@ -1,11 +1,14 @@
 import express from "express";
 import { check, validationResult } from "express-validator";
 import FoodApp from "../models/foodModel";
+import userAuthenticator from "../common/userAuthenticator";
+import adminAuthenticator from "../common/adminAuthenticator";
 
 const foodAppRouter = express.Router();
 
 foodAppRouter.post(
   "/add",
+  adminAuthenticator,
   [
     check("name").notEmpty().withMessage("Invalid name"),
     check("price").notEmpty().withMessage("Invalid price"),
@@ -21,6 +24,12 @@ foodAppRouter.post(
       }
 
       const { name, price, description, image } = req.body;
+
+      const item = await FoodApp.findOne({ name });
+
+      if (item) {
+        return res.status(500).json({ message: "this item already exist" });
+      }
       const newFoodItem = new FoodApp({
         name,
         price,
