@@ -19,4 +19,4 @@ export const { userDataAction } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectUser = state.auth.user;
+export const selectUser = (state) => state.auth?.user;
