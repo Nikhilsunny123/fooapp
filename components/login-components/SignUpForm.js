@@ -1,6 +1,8 @@
 import { View, Text, TextInput, Button } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "react-query";
+import loginServices from "../../services/auth.services";
 
 const SignUpForm = () => {
   const LoginSchema = Yup.object().shape({
@@ -11,8 +13,26 @@ const SignUpForm = () => {
       .required("Password is required"),
   });
 
+  const mutation = useMutation(loginServices.signUpService, {
+    onSuccess: (data) => {
+      console.log("Item changed successfully:", data);
+      onModalState(false);
+    },
+    onError: (error) => {
+      const responce = error;
+      console.error(responce.message);
+      if (responce?.response?.status === 500) {
+        setErrorMessage(responce?.response?.data.message);
+      } else {
+        console.log(error);
+        setErrorMessage("network Error");
+      }
+    },
+  });
+
   const handleLogin = (values) => {
     // You can handle the login logic here
+    mutation.mutate(values);
     console.log(values);
   };
 

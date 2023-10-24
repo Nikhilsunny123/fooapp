@@ -1,8 +1,12 @@
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import loginServices from "../../services/auth.services";
+import { useMutation } from "react-query";
+import { useState } from "react";
 
 const LoginForm = () => {
+  const [errorMessage, setErrorMessage] = useState();
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
@@ -10,15 +14,32 @@ const LoginForm = () => {
       .required("Password is required"),
   });
 
+  const mutation = useMutation(loginServices.loginService, {
+    onSuccess: (data) => {
+      console.log("Item changed successfully:", data);
+    },
+    onError: (error) => {
+      const responce = error;
+      console.error(responce.message);
+      if (responce?.response?.status === 500) {
+        setErrorMessage(responce?.response?.data.message);
+      } else {
+        console.log(error);
+        setErrorMessage("network Error");
+      }
+    },
+  });
+
   const handleLogin = (values) => {
     // You can handle the login logic here
+    mutation.mutate(values);
     console.log(values);
   };
 
   return (
-    <View>
+    <View style={styles.loginContainer}>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "", role: "user" }}
         validationSchema={LoginSchema}
         onSubmit={handleLogin}
       >
@@ -59,3 +80,13 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+ const styles = StyleSheet.create({
+  loginContainer: {
+    width:"50%",
+    display: "flex",
+    backgroundColor: "blue",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
