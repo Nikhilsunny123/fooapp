@@ -4,18 +4,18 @@ import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 
 const Main = () => {
-  useEffect(() => {
-    AsyncStorage.getItem("token");
-  }, []);
+  // useEffect(() => {
+  //   AsyncStorage.getItem("token");
+  // }, []);
 
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
-  useEffect(() => {
-    if (!AsyncStorage.getItem("token")) {
-      Stack.navigate("Login");
-    }
-  }, [ navigation]);
+  // useEffect(() => {
+  //   if (!AsyncStorage.getItem("token")) {
+  //     Stack.navigate("Login");
+  //   }
+  // }, [ navigation]);
 
 
   return (
